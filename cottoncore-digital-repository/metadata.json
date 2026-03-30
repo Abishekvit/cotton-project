@@ -1,0 +1,7 @@
+{
+  "name": "CottonCore Digital Repository",
+  "description": "A high-performance digital repository for cotton fiber analysis, featuring high-resolution imaging, laboratory-grade quality parameters, and advanced graphical visualization for academic and industrial analysis.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

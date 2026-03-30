@@ -1,0 +1,39 @@
+import { initializeApp } from "firebase/app";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  TwitterAuthProvider
+} from "firebase/auth";
+
+// 🔥 VITE uses import.meta.env (NOT process.env)
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+};
+
+// Optional debug (remove later)
+console.log("Firebase Config Loaded:", {
+  ...firebaseConfig,
+  apiKey: firebaseConfig.apiKey ? "LOADED" : "MISSING"
+});
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Providers
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
+const twitterProvider = new TwitterAuthProvider();
+
+// Force account selection for Google login
+googleProvider.setCustomParameters({
+  prompt: "select_account",
+});
+
+export { auth, googleProvider, githubProvider, twitterProvider };

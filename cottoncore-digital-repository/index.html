@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="en" class="overflow-x-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CottonCore | Digital Fiber Repository</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-light: #f8fafc;
+            --bg-dark: #020617;
+        }
+
+        html {
+            background-color: var(--bg-light);
+            transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+            width: 100vw;
+        }
+
+        html.dark {
+            background-color: var(--bg-dark);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            width: 100vw;
+            color: #0f172a;
+        }
+
+        .dark body {
+            color: #f8fafc;
+        }
+
+        /* Highly Evident Rapid Color Changing Aurora Effect */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15), transparent);
+        }
+
+        .aurora-container {
+            position: absolute;
+            inset: -100%;
+            filter: blur(50px);
+            opacity: 0.7;
+            transition: opacity 1s ease;
+            animation: rotateContainer 25s linear infinite;
+        }
+
+        .dark .aurora-container {
+            opacity: 1.0;
+        }
+
+        .aurora-blob {
+            position: absolute;
+            width: 90vw;
+            height: 90vw;
+            border-radius: 50%;
+            mix-blend-mode: plus-lighter;
+            /* Drastically reduced duration for "rapid" effect */
+            animation: 
+                moveBlob 5s infinite alternate ease-in-out,
+                colorShift 4s infinite linear;
+        }
+
+        .dark .aurora-blob {
+            mix-blend-mode: screen;
+        }
+
+        /* Vivid, distinct starting colors for maximum contrast during cycle */
+        .blob-1 { background: radial-gradient(circle at center, #3b82f6, transparent 75%); top: -5%; left: -5%; animation-delay: 0s, 0s; }
+        .blob-2 { background: radial-gradient(circle at center, #f43f5e, transparent 75%); bottom: -5%; right: -5%; animation-delay: -1.5s, -1s; }
+        .blob-3 { background: radial-gradient(circle at center, #10b981, transparent 75%); top: 35%; left: 35%; animation-delay: -3s, -2s; }
+        .blob-4 { background: radial-gradient(circle at center, #f59e0b, transparent 75%); bottom: 15%; left: -15%; animation-delay: -4.5s, -3s; }
+
+        @keyframes moveBlob {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(25%, 15%) scale(1.4); }
+            100% { transform: translate(-15%, 20%) scale(0.7); }
+        }
+
+        @keyframes colorShift {
+            0% { filter: hue-rotate(0deg) brightness(1.2) saturate(1.5); }
+            50% { filter: hue-rotate(180deg) brightness(1.5) saturate(2); }
+            100% { filter: hue-rotate(360deg) brightness(1.2) saturate(1.5); }
+        }
+
+        @keyframes rotateContainer {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .light .bg-glow { background-color: #f8fafc; }
+        .dark .bg-glow { background-color: #020617; }
+
+        /* Premium HUD Borders */
+        .hud-border {
+            position: relative;
+        }
+        .hud-border::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px;
+            width: 15px; height: 15px;
+            border-top: 2px solid #3b82f6;
+            border-left: 2px solid #3b82f6;
+            z-index: 10;
+        }
+        .hud-border::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; right: -1px;
+            width: 15px; height: 15px;
+            border-bottom: 2px solid #3b82f6;
+            border-right: 2px solid #3b82f6;
+            z-index: 10;
+        }
+
+        .glass-terminal {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .dark .glass-terminal {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: inline-flex;
+            animation: marquee 30s linear infinite;
+        }
+
+        /* Smooth transitions for theme toggle and UI interactions */
+        * {
+            transition: background-color 0.4s ease, border-color 0.4s ease, color 0.2s ease, box-shadow 0.4s ease;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client?deps=react@19.0.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.468.0?deps=react@19.0.0",
+    "recharts": "https://esm.sh/recharts@2.15.0?deps=react@19.0.0,react-dom@19.0.0",
+    "framer-motion": "https://esm.sh/framer-motion@11.15.0?deps=react@19.0.0,react-dom@19.0.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.36.0"
+  }
+}
+</script>
+<!-- <link rel="stylesheet" href="/index.css"> -->
+</head>
+<body class="overflow-x-hidden">
+    <div class="bg-glow">
+        <div class="aurora-container">
+            <div class="aurora-blob blob-1"></div>
+            <div class="aurora-blob blob-2"></div>
+            <div class="aurora-blob blob-3"></div>
+            <div class="aurora-blob blob-4"></div>
+        </div>
+    </div>
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>

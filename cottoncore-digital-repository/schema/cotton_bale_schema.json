@@ -1,0 +1,82 @@
+
+{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "required": ["bale_id", "count", "subtype", "variety", "metrics"],
+    "properties": {
+      "bale_id": {
+        "bsonType": "string",
+        "description": "Bale ID (e.g. KEP-150BALES/1)"
+      },
+      "count": {
+        "enum": ["20s", "30s", "40s", "50s", "60s", "70s", "80s", "100s", "120s", "140s"],
+        "description": "Cotton count category"
+      },
+      "subtype": {
+        "enum": [
+          "Type 1", "Type 2", "Type 3", "Type 4", "Type 5",
+          "Type 6", "Type 7", "Type 8", "Type 9", "Type 10"
+        ]
+      },
+      "variety": { "bsonType": "string" },
+      "origin": { "bsonType": "string" },
+      "metrics": {
+        "bsonType": "object",
+        "required": ["sci", "mic", "str", "sl2", "ur"],
+        "properties": {
+          "sci": { "bsonType": "number" },
+          "grade": { "bsonType": "string" },
+          "mst": { "bsonType": "number", "description": "Moisture (%)" },
+          "mic": { "bsonType": "number" },
+          "mat": { "bsonType": "number", "description": "Maturity (MC)" },
+          "sl2": { "bsonType": "number", "description": "Staple Length (MC)" },
+          "ur": { "bsonType": "number" },
+          "sf": { "bsonType": "number", "description": "Short Fiber (%)" },
+          "str": { "bsonType": "number", "description": "Strength (g/tex, MC)" },
+          "elg": { "bsonType": "number", "description": "Elongation (%)" },
+          "rd": { "bsonType": "number" },
+          "bPlus": { "bsonType": "number", "description": "+b (Yellowness)" },
+          "cGrd": { "bsonType": "string", "description": "Color Grade (Upland)" },
+          "trCnt": { "bsonType": "number" },
+          "trAr": { "bsonType": "number", "description": "Trash Area (%)" },
+          "trID": { "bsonType": "string" },
+          "trGrd": { "bsonType": "string" },
+          "amt": { "bsonType": "number", "description": "Amount" }
+        }
+      },
+      "statistics": {
+        "bsonType": "object",
+        "description": "Computed statistics for the group (not per bale)",
+        "properties": {
+          "n": { "bsonType": "int", "description": "Number of bales" },
+          "average": {
+            "bsonType": "object",
+            "properties": {
+              "sci": { "bsonType": "number" },
+              "mic": { "bsonType": "number" },
+              "str": { "bsonType": "number" },
+              "sl2": { "bsonType": "number" },
+              "ur": { "bsonType": "number" },
+              "sf": { "bsonType": "number" },
+              "elg": { "bsonType": "number" },
+              "rd": { "bsonType": "number" },
+              "bPlus": { "bsonType": "number" },
+              "trCnt": { "bsonType": "number" },
+              "trAr": { "bsonType": "number" }
+            }
+          },
+          "stdDev": {
+            "bsonType": "object",
+            "properties": {
+              "sci": { "bsonType": "number" },
+              "mic": { "bsonType": "number" },
+              "str": { "bsonType": "number" },
+              "sl2": { "bsonType": "number" },
+              "ur": { "bsonType": "number" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
