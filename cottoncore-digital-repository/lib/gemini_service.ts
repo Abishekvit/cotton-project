@@ -1,14 +1,14 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { BaleData } from '../types';
 
-const getAI = () => new GoogleGenerativeAI("AIzaSyD3y_9SQmiIiNagmCCbXchvDDla1ChyYrE");
+const getAI = () => new GoogleGenerativeAI("AIzaSyBXdgSviX4aAqHEhw4uda5YBUDEW5D45Gk");
 /**
  * Analyzes cotton fiber quality using Gemini 2.0 Flash.
  */
 export async function analyzeFiberQuality(metrics: BaleData['metrics']): Promise<string> {
   try {
     const ai = getAI();
-    const model = ai.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+    const model = ai.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     const prompt = `Analyze this cotton fiber batch based on the following HVI metrics:
     - SCI (Spinning Consistency Index): ${metrics.sci}
@@ -51,7 +51,7 @@ export async function predictFiberCount(imageBase64: string): Promise<{
 }> {
   try {
     const ai = getAI();
-    const model = ai.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const model = ai.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     const imagePart = {
       inlineData: {
