@@ -1,28 +1,16 @@
-
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { BaleData } from '../types';
 
-// Use this helper to initialize GoogleGenAI inside functions
-// Fix 1: Allow browser usage
-const getAI = () => new GoogleGenAI({ 
-  apiKey: import.meta.env.VITE_GEMINI_API_KEY
-});
+const getAI = () => new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
-// Fix 2: In analyzeFiberQuality
-const response = await ai.models.generateContent({
-  model: 'gemini-2.0-flash',   // was 'gemini-3-flash-preview'
-  contents: prompt,
-});
-
-// Fix 3: In predictFiberCount
-const response = await ai.models.generateContent({
-  model: 'gemini-2.0-flash',   // was 'gemini-3-flash-preview'
-  contents: { parts: [imagePart, { text: prompt }] },
-  config: { responseMimeType: "application/json" }
-});
-export async function analyzeFiberQuality(metrics: BaleData['metrics']) {
+/**
+ * Analyzes cotton fiber quality using Gemini 2.0 Flash.
+ */
+export async function analyzeFiberQuality(metrics: BaleData['metrics']): Promise<string> {
   try {
     const ai = getAI();
+    const model = ai.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
     const prompt = `Analyze this cotton fiber batch based on the following HVI metrics:
     - SCI (Spinning Consistency Index): ${metrics.sci}
     - Micronaire: ${metrics.mic}
@@ -39,13 +27,9 @@ export async function analyzeFiberQuality(metrics: BaleData['metrics']) {
     
     Keep it concise and technical. Format as plain text.`;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: prompt,
-    });
-
-    // Access .text property directly per guidelines
-    return response.text;
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
   } catch (error) {
     console.error("AI Analysis Error:", error);
     return "AI analysis temporarily unavailable. Please check HVI parameters manually.";
@@ -53,14 +37,26 @@ export async function analyzeFiberQuality(metrics: BaleData['metrics']) {
 }
 
 /**
- * Uses Gemini as a Vision-ML Classifier to predict yarn count suitability (Target: 40s).
+ * Uses Gemini Vision to predict yarn count suitability (Target: 40s).
  */
-export async function predictFiberCount(imageBase64: string) {
+export async function predictFiberCount(imageBase64: string): Promise<{
+  prediction: "40s_SUITABLE" | "NON_40s_GRADE";
+  probability: number;
+  analysis_logs: string[];
+  morphology: {
+    fineness_estimate: "Fine" | "Medium" | "Coarse";
+    convolution_rate: "High" | "Medium" | "Low";
+    maturity_visual: "Mature" | "Immature";
+  };
+  reasoning: string;
+}> {
   try {
     const ai = getAI();
+    const model = ai.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
     const imagePart = {
       inlineData: {
-        mimeType: 'image/jpeg',
+        mimeType: 'image/jpeg' as const,
         data: imageBase64.split(',')[1],
       },
     };
@@ -74,33 +70,25 @@ export async function predictFiberCount(imageBase64: string) {
     3. Impurity Mapping: Detect neps or trash that might cause 40s yarn breakage.
     4. Maturity: Assess the lumen width and wall thickness visually.
     
-    JSON Output Required:
+    Respond ONLY with valid JSON, no markdown, no extra text:
     {
-      "prediction": "40s_SUITABLE" | "NON_40s_GRADE",
-      "probability": number (0.0 to 1.0),
-      "analysis_logs": [
-        "Detection of [Feature] completed...",
-        "Calculated [Metric] at [Value]..."
-      ],
+      "prediction": "40s_SUITABLE" or "NON_40s_GRADE",
+      "probability": number between 0.0 and 1.0,
+      "analysis_logs": ["Detection of [Feature] completed...", "Calculated [Metric] at [Value]..."],
       "morphology": {
-        "fineness_estimate": "Fine" | "Medium" | "Coarse",
-        "convolution_rate": "High" | "Medium" | "Low",
-        "maturity_visual": "Mature" | "Immature"
+        "fineness_estimate": "Fine" or "Medium" or "Coarse",
+        "convolution_rate": "High" or "Medium" or "Low",
+        "maturity_visual": "Mature" or "Immature"
       },
       "reasoning": "A one-sentence scientific conclusion."
     }`;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: { parts: [imagePart, { text: prompt }] },
-      config: {
-        responseMimeType: "application/json"
-      }
-    });
+    const result = await model.generateContent([imagePart, prompt]);
+    const response = await result.response;
+    const rawText = response.text();
 
-    // Access .text property directly and parse JSON
-    const result = JSON.parse(response.text || '{}');
-    return result;
+    const clean = rawText.replace(/```json|```/g, '').trim();
+    return JSON.parse(clean);
   } catch (error) {
     console.error("Prediction Inference Error:", error);
     throw error;
