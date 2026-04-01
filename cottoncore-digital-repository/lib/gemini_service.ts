@@ -8,8 +8,9 @@ const getAI = () => new GoogleGenerativeAI("AIzaSyBXdgSviX4aAqHEhw4uda5YBUDEW5D4
 export async function analyzeFiberQuality(metrics: BaleData['metrics']): Promise<string> {
   try {
     const ai = getAI();
-    const model = ai.getGenerativeModel({ model: 'gemini-pro' });
-
+    const model = ai.getGenerativeModel({
+  model: "gemini-1.5-flash"
+});
     const prompt = `Analyze this cotton fiber batch based on the following HVI metrics:
     - SCI (Spinning Consistency Index): ${metrics.sci}
     - Micronaire: ${metrics.mic}
@@ -51,7 +52,9 @@ export async function predictFiberCount(imageBase64: string): Promise<{
 }> {
   try {
     const ai = getAI();
-    const model = ai.getGenerativeModel({ model: 'gemini-pro' });
+    const model = ai.getGenerativeModel({
+  model: "gemini-1.5-flash"
+});
 
     const imagePart = {
       inlineData: {
