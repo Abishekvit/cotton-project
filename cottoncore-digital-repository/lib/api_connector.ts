@@ -163,8 +163,8 @@
 //   }
 // };
 import { CottonReport, BaleData } from '../types';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:5000/api';
+const API_BASE_URL = "https://cotton-backend-byj5.onrender.com/api";
+// const API_BASE_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:5000/api';
 const ASSET_BASE_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/assets` : 'http://localhost:5000/assets';
 
 export interface FetchResponse {

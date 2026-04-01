@@ -15,7 +15,7 @@ export async function predictWithCustomModel(imageBase64: string) {
     formData.append('file', blob, 'sample.jpg');
 
     // Assumes backend is running on localhost:8000
-    const response = await fetch('http://localhost:8000/predict', {
+    const response = await fetch('https://cotton-ml.onrender.com/predict', {
       method: 'POST',
       body: formData,
     });
