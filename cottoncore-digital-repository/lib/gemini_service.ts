@@ -3,12 +3,23 @@ import { GoogleGenAI } from "@google/genai";
 import { BaleData } from '../types';
 
 // Use this helper to initialize GoogleGenAI inside functions
+// Fix 1: Allow browser usage
 const getAI = () => new GoogleGenAI({ 
-  apiKey: import.meta.env.VITE_GEMINI_API_KEY 
+  apiKey: import.meta.env.VITE_GEMINI_API_KEY
 });
-/**
- * Analyzes cotton fiber quality using Gemini 3 Flash.
- */
+
+// Fix 2: In analyzeFiberQuality
+const response = await ai.models.generateContent({
+  model: 'gemini-2.0-flash',   // was 'gemini-3-flash-preview'
+  contents: prompt,
+});
+
+// Fix 3: In predictFiberCount
+const response = await ai.models.generateContent({
+  model: 'gemini-2.0-flash',   // was 'gemini-3-flash-preview'
+  contents: { parts: [imagePart, { text: prompt }] },
+  config: { responseMimeType: "application/json" }
+});
 export async function analyzeFiberQuality(metrics: BaleData['metrics']) {
   try {
     const ai = getAI();
