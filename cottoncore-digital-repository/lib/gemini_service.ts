@@ -3,8 +3,9 @@ import { GoogleGenAI } from "@google/genai";
 import { BaleData } from '../types';
 
 // Use this helper to initialize GoogleGenAI inside functions
-const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
-
+const getAI = () => new GoogleGenAI({ 
+  apiKey: import.meta.env.VITE_GEMINI_API_KEY 
+});
 /**
  * Analyzes cotton fiber quality using Gemini 3 Flash.
  */
