@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { BaleData } from '../types';
 
-const getAI = () => new GoogleGenerativeAI("AIzaSyBXdgSviX4aAqHEhw4uda5YBUDEW5D45Gk");
+const getAI = () => new GoogleGenerativeAI("AIzaSyA_IHMLkLnPKXkFbSU6XEKjX6VsLVjfeP0");
 /**
  * Analyzes cotton fiber quality using Gemini 2.0 Flash.
  */
